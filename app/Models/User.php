@@ -18,9 +18,9 @@ class User extends Authenticatable
      * @var array<int, string>
      */
     protected $fillable = [
+        'role_id',
         'name',
         'phone',
-        'email',
         'password',
     ];
 
@@ -33,8 +33,8 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-    
-    
+
+
 
 
     /**

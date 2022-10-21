@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\Role;
 
 class UserController extends Controller
 {
@@ -16,7 +17,6 @@ class UserController extends Controller
 
 
         $name = $request->input('name');
-        $email= $request->input('email');
         $phone= $request->input('phone');
         $password= $request->input('password');
 
@@ -25,12 +25,11 @@ class UserController extends Controller
         ]);
 
         // if(!$validated)
-        //     http_response_code(401); 
+        //     http_response_code(401);
 
             $register=User::create([
                 'name'=>$name,
                 'phone'=>$phone,
-                'email'=>$email,
                 'password'=>Hash::make($password),
             ]);
 
@@ -60,6 +59,42 @@ class UserController extends Controller
 
     }
 
+
+    public function getProfil(Request $request){
+
+      $user_phone=$request->input("phone");
+      $user=User::where("phone",$user_phone)->first();
+
+      return json_encode($user);
+
+    }
+
+
+    public function createNewRole(Request $request){
+
+      $role=$request->input("role");
+
+      Role::create(['libelle'=>$role]);
+    }
+
+    public function createNewUser(Request  $request){
+
+        $role=$request->input("role");
+        $username=$request->input("username");
+        $phone=$request->input("phone");
+        $password=$request->input("password");
+
+        User::create([
+          "role_id"=>$role,
+          "name"=>$username,
+          "phone"=>$phone,
+          "password"=>Hash::make($password)
+        ]);
+
+    }
+
+
+    // public function
 
 
 
