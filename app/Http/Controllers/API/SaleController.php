@@ -28,25 +28,22 @@ class SaleController extends Controller
       $user=$request->input("user");
       $products=$request->input("products");
 
-      $products=[{
-      	"product_name": "Mais"
-      }];
+      $value=2;
 
-      foreach ($products as $key => $value) {
+      $products=json_decode($products);
 
-          echo $value;
+      // dd($products.size());
 
-        // ProductSale::create([
-        //   "product_name"=>$value->product_name,
-        //   "product_qte"=>$value->product_qte,
-        //   "user_id"=>$user,
-        // ]);
+      for ($i=0;$i<$value;$i++) {
+
+          // echo($products[$i])."<br/>";
+
 
       }
 
       Sale::create([
         "user_id"=>$user,
-        "products"=>$products
+        "products"=>json_encode($products)
       ]);
 
     }
