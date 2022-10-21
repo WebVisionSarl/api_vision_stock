@@ -20,7 +20,7 @@ class SaleController extends Controller
 
       // $today=;
       // $rapp=Sale::where('created_at',$today);
-      
+
 
     }
 
@@ -28,16 +28,19 @@ class SaleController extends Controller
       $user=$request->input("user");
       $products=$request->input("products");
 
+      $products=[{
+      	"product_name": "Mais"
+      }];
 
       foreach ($products as $key => $value) {
-        // code...
 
-        ProductSale::create([
-          "product_name"=>$value->product_name,
-          "product_qte"=>$value->product_qte,
-          "user_id"=>$user,
-        ]);
+          echo $value;
 
+        // ProductSale::create([
+        //   "product_name"=>$value->product_name,
+        //   "product_qte"=>$value->product_qte,
+        //   "user_id"=>$user,
+        // ]);
 
       }
 
