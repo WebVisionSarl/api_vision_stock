@@ -29,4 +29,5 @@ Route::post('register', [UserController::class, 'registerUser']);
 Route::post('save_product', [ProductController::class, 'saveProduct']);
 Route::post('save_sales', [SaleController::class, 'saveSale']);
 Route::get('all_product', [ProductController::class, 'getAllProduct']);
+Route::get('all_sales', [SaleController::class, 'getAllSales']);
 Route::get('detail_product/{id}', [ProductController::class, 'detailProduct']);

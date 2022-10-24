@@ -48,4 +48,9 @@ class SaleController extends Controller
 
     }
 
+
+    public function  getAllSales(){
+      Sale::all();
+    }
+
 }

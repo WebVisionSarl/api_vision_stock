@@ -18,6 +18,7 @@ return new class extends Migration
             $table->increments('id');
             $table->string("product_name");
             $table->string("product_qte")->nullable();
+            $table->text("img_prod")->nullable();
             $table->string("product_price");
             $table->unsignedBigInteger("user_id");
 

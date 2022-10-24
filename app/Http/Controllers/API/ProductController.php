@@ -35,11 +35,13 @@ class ProductController extends Controller
       $product_name=$request->input("product_name");
       $product_price=$request->input("product_price");
       $product_qte=$request->input("product_qte");
+      $img_prod=$request->input("img_prod");
       $user_id=$request->input("user_id");
 
       Product::create([
         'product_name'=>$product_name,
         'product_price'=>$product_price,
+        'img_prod'=>$img_prod,
         'product_qte'=>$product_qte,
         'user_id'=>$user_id,
 
