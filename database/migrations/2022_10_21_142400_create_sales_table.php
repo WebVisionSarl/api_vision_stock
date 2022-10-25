@@ -15,9 +15,10 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id()->autoIncrement();
-            $table->json('products');
+          $table->string('paymethod')->nullable();
+            $table->string('contactclient')->nullable();
+            $table->string('clientname')->nullable();
             $table->unsignedBigInteger("user_id");
-
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });

@@ -21,8 +21,10 @@ return new class extends Migration
             $table->text("img_prod")->nullable();
             $table->string("product_price");
             $table->unsignedBigInteger("user_id");
+            $table->unsignedBigInteger("sale_id");
 
             $table->foreign('user_id')->references('id')->on('users');
+            $table->foreign('sale_id')->references('id')->on('sales');
             $table->timestamps();
         });
     }

@@ -26,25 +26,29 @@ class SaleController extends Controller
 
     public function saveSale(Request $request){
       $user=$request->input("user");
+      $clientname=$request->input("clientname");
+      $contactclient=$request->input("contactclient");
+      $paymethod=$request->input("paymethod");
       $products=$request->input("products");
-
-      $value=2;
-
+      $size=$request->input("size_prod");
       $products=json_decode($products);
 
-      // dd($products.size());
-
-      for ($i=0;$i<$value;$i++) {
-
-          // echo($products[$i])."<br/>";
-
-
-      }
 
       Sale::create([
         "user_id"=>$user,
-        "products"=>json_encode($products)
+        "clientname"=>$clientname,
+        "contactclient"=>$contactclient,
+        "paymethod"=>$paymethod,
       ]);
+
+      for ($i=0;$i<size;$i++) {
+        ProductSale::create([
+          'product_name'=>$products[$i]->product_name,
+          'product_qte'=>$products[$i]->product_name,
+          'product_price'=>$products[$i]->product_,
+          'user_id'=>$user,
+        ]);
+      }
 
     }
 
