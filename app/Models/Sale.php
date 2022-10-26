@@ -11,7 +11,10 @@ class Sale extends Model
 
     protected $fillable = [
         'user_id',
-        'products',
+        'clientname',
+        'contactclient',
+        'paymethod',
+        'totalpay',
     ];
 
 }

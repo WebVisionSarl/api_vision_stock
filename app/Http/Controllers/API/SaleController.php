@@ -11,6 +11,8 @@ use App\Models\Role;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\ProductSale;
+use Illuminate\Support\Facades\Log;
+
 
 class SaleController extends Controller
 {
@@ -31,22 +33,33 @@ class SaleController extends Controller
       $paymethod=$request->input("paymethod");
       $products=$request->input("products");
       $size=$request->input("size_prod");
-      $products=json_decode($products);
+      $total=$request->input("total");
 
 
-      Sale::create([
+      $sales=Sale::create([
         "user_id"=>$user,
         "clientname"=>$clientname,
         "contactclient"=>$contactclient,
         "paymethod"=>$paymethod,
+        "totalpay"=>$total,
       ]);
 
-      for ($i=0;$i<size;$i++) {
+      for ($i=0;$i<$size;$i++) {
+
+
         ProductSale::create([
-          'product_name'=>$products[$i]->product_name,
-          'product_qte'=>$products[$i]->product_name,
-          'product_price'=>$products[$i]->product_,
+          'sale_id'=>$sales->id,
+          'product_name'=>$products[$i]["name"],
+          'product_qte'=>$products[$i]["qte"],
+          'product_price'=>$products[$i]["unit_price"],
           'user_id'=>$user,
+        ]);
+
+
+        $getToUp=Product::where('product_name',$products[$i]["name"])->first();
+        Product::whereId($getToUp->id)->update([
+            //soustract on BD
+            'product_qte'=>$getToUp->product_qte-$products[$i]["qte"],
         ]);
       }
 
@@ -54,7 +67,7 @@ class SaleController extends Controller
 
 
     public function  getAllSales(){
-      Sale::all();
+      return json_encode(Sale::all());
     }
 
 }

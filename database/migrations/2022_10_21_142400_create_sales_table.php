@@ -18,6 +18,8 @@ return new class extends Migration
           $table->string('paymethod')->nullable();
             $table->string('contactclient')->nullable();
             $table->string('clientname')->nullable();
+            $table->string('totalpay')->nullable();
+
             $table->unsignedBigInteger("user_id");
             $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
