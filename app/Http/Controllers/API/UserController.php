@@ -43,7 +43,7 @@ class UserController extends Controller
 
         $phone= $request->input('phone');
         $mdp= $request->input('password');
-        $verif=User::where('phone',$phone)->first();
+        $verif=User::with("role")->where('phone',$phone)->first();
 
         if($verif){
 
@@ -93,9 +93,7 @@ class UserController extends Controller
 
     }
 
-
     // public function
-
 
 
 }
