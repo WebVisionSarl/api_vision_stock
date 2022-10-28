@@ -24,7 +24,6 @@ class ProductController extends Controller
 
     // Get Detail Product
     public function detailProduct($id){
-
       $product=Product::findOrFail($id);
       return json_encode($product);
     }
