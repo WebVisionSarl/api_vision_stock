@@ -13,13 +13,24 @@ use App\Models\Setting;
 class SettingsController extends Controller
 {
 
-  public function configTheme($name){
+  public function configTheme(){
 
-    $setting_id=Setting::first()->id;
-     Setting::whereId($setting_id)->update([
-         'theme'=>$name,
-     ]);
+    $setting=Setting::first();
 
+    if($setting->theme=="theme-dark"){
+         Setting::whereId($setting->id)->update([
+             'theme'=>"theme-white",
+         ]);
+    }else{
+         Setting::whereId($setting->id)->update([
+             'theme'=>"theme-dark",
+         ]);
+    }
+
+  }
+
+  public function getsettings(){
+    return json_encode(Setting::first());
   }
 
 }

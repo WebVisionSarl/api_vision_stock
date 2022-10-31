@@ -19,17 +19,16 @@ class UserController extends Controller
         $name = $request->input('name');
         $phone= $request->input('phone');
         $password= $request->input('password');
+        $role= $request->input('role_id');
 
         $validated = $request->validate([
             'phone' => 'required|unique:users|max:255',
         ]);
 
-        // if(!$validated)
-        //     http_response_code(401);
-
             $register=User::create([
                 'name'=>$name,
                 'phone'=>$phone,
+                'role_id'=>$role,
                 'password'=>Hash::make($password),
             ]);
 
