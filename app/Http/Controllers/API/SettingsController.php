@@ -21,10 +21,15 @@ class SettingsController extends Controller
          Setting::whereId($setting->id)->update([
              'theme'=>"theme-white",
          ]);
+
+       return json_encode("theme-white");
+
     }else{
          Setting::whereId($setting->id)->update([
              'theme'=>"theme-dark",
          ]);
+
+        return json_encode("theme-dark");
     }
 
   }
