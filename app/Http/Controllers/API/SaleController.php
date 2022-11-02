@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\Credit;
 use App\Models\ProductSale;
 use Illuminate\Support\Facades\Log;
 
@@ -23,6 +24,64 @@ class SaleController extends Controller
       // $today=;
       // $rapp=Sale::where('created_at',$today);
 
+
+    }
+
+    public function credits(){
+      $credits=Sale::where("paymethod","Crédit")->get();
+
+      return json_encode($credits);
+    }
+
+    public function soldecredit(Request $request){
+
+      $sale_id=$request->input("sale_id");
+      $paysolde=$request->input("paysolde");
+      $credit_total=$request->input("credit_total");
+      $get_cred=Credit::where("sale_id",$sale_id)->first();
+
+      // dd($);
+
+      if($get_cred){
+
+          $reste_a_payer=$get_cred->total_credit-$paysolde;
+          if($get_cred->payer>=$get_cred->total_credit)
+            $reste_a_payer=0;
+
+            $newpay=Credit::whereId($get_cred->id)->update([
+                'payer'=>$get_cred->payer+$paysolde,
+                'reste_a_payer'=>$reste_a_payer,
+                'total_credit'=>$get_cred->total_credit
+            ]);
+
+            if($reste_a_payer>0){
+                return json_encode("remboursement");
+            }else{
+              Sale::whereId($sale_id)->update([
+                  'paymethod'=>"Espèce",
+              ]);
+
+              return json_encode("remboursement_total");
+            }
+
+      }else{
+
+        Credit::create([
+            'sale_id'=>$sale_id,
+            'payer'=>$paysolde,
+            'reste_a_payer'=>$credit_total-$paysolde,
+            'total_credit'=>$credit_total
+        ]);
+
+        if($paysolde>=$credit_total){
+          Sale::whereId($sale_id)->update([
+              'paymethod'=>"Espèce",
+          ]);
+        }
+
+          return json_encode("nouveaupaiement");
+
+      }
 
     }
 

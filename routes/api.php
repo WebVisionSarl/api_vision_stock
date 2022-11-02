@@ -28,6 +28,8 @@ Route::post('register', [UserController::class, 'registerUser']);
 Route::post('configTheme', [SettingsController::class, 'configTheme']);
 Route::post('save_product', [ProductController::class, 'saveProduct']);
 Route::post('save_sales', [SaleController::class, 'saveSale']);
+Route::post('soldecredit', [SaleController::class, 'soldecredit']);
+Route::get('credits', [SaleController::class, 'credits']);
 Route::get('all_product', [ProductController::class, 'getAllProduct']);
 Route::get('all_sales', [SaleController::class, 'getAllSales']);
 Route::get('detail_product/{id}', [ProductController::class, 'detailProduct']);
