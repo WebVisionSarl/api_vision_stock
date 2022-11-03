@@ -44,24 +44,32 @@ class SaleController extends Controller
 
       if($get_cred){
 
-          $reste_a_payer=$get_cred->total_credit-$paysolde;
+          $reste_a_payer=$get_cred->total_credit-$paysolde-$get_cred->payer;
           if($get_cred->payer>=$get_cred->total_credit)
             $reste_a_payer=0;
 
             $newpay=Credit::whereId($get_cred->id)->update([
                 'payer'=>$get_cred->payer+$paysolde,
                 'reste_a_payer'=>$reste_a_payer,
-                'total_credit'=>$get_cred->total_credit
-            ]);
+              'total_credit'=>$get_cred->total_credit
+          ]);
+
+
+            $newcount=Credit::where("sale_id",$sale_id)->first();
 
             if($reste_a_payer>0){
-                return json_encode("remboursement");
+
+              Sale::whereId($sale_id)->update([
+                  'totalpay_credit'=>$newcount->total_credit-$newcount->payer,
+              ]);
+
+                return json_encode($reste_a_payer);
             }else{
               Sale::whereId($sale_id)->update([
                   'paymethod'=>"Espèce",
               ]);
 
-              return json_encode("remboursement_total");
+              return json_encode($reste_a_payer);
             }
 
       }else{
@@ -75,11 +83,11 @@ class SaleController extends Controller
 
         if($paysolde>=$credit_total){
           Sale::whereId($sale_id)->update([
-              'paymethod'=>"Espèce",
+              'paymethod'=>"Credit Payer",
           ]);
         }
 
-          return json_encode("nouveaupaiement");
+          return json_encode($credit_total-$paysolde);
 
       }
 

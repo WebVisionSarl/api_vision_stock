@@ -27,6 +27,8 @@ Route::get('getsettings', [SettingsController::class, 'getsettings']);
 Route::post('register', [UserController::class, 'registerUser']);
 Route::post('configTheme', [SettingsController::class, 'configTheme']);
 Route::post('save_product', [ProductController::class, 'saveProduct']);
+Route::post('update_product', [ProductController::class, 'update_product']);
+Route::post('delete_product', [ProductController::class, 'delete_product']);
 Route::post('save_sales', [SaleController::class, 'saveSale']);
 Route::post('soldecredit', [SaleController::class, 'soldecredit']);
 Route::get('credits', [SaleController::class, 'credits']);

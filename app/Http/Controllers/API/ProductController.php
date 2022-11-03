@@ -22,6 +22,27 @@ class ProductController extends Controller
       return json_encode($products);
     }
 
+
+    public function update_product(Request $request){
+
+        $product_id=$request->input("product_id");
+        $new_name=$request->input("new_name");
+        $new_price=$request->input("new_price");
+        $new_qte=$request->input("new_qte");
+        $img_prod=$request->input("img_prod");
+
+
+        Product::whereId($product_id)->update([
+            'product_qte'=>$new_qte,
+            'product_price'=>$new_price,
+            'product_name'=>$new_name,
+        ]);
+
+        $product=Product::findOrFail($product_id);
+        return json_encode($product);
+
+    }
+
     // Get Detail Product
     public function detailProduct($id){
       $product=Product::findOrFail($id);

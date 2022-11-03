@@ -15,6 +15,7 @@ class Sale extends Model
         'contactclient',
         'paymethod',
         'totalpay',
+        'totalpay_credit',
     ];
 
 }
