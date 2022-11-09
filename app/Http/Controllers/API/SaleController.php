@@ -74,20 +74,28 @@ class SaleController extends Controller
 
       }else{
 
+        $total_cred=Sale::where('id',$sale_id)->first()->totalpay;
+
         Credit::create([
             'sale_id'=>$sale_id,
             'payer'=>$paysolde,
-            'reste_a_payer'=>$credit_total-$paysolde,
-            'total_credit'=>$credit_total
+            'reste_a_payer'=>$total_cred-$paysolde,
+            'total_credit'=>$total_cred
         ]);
 
-        if($paysolde>=$credit_total){
+        if($paysolde>=$total_cred){
           Sale::whereId($sale_id)->update([
               'paymethod'=>"Credit Payer",
+              'totalpay_credit'=>$total_cred-$paysolde,
           ]);
+        }else{
+          Sale::whereId($sale_id)->update([
+              'totalpay_credit'=>$total_cred-$paysolde,
+          ]);
+
         }
 
-          return json_encode($credit_total-$paysolde);
+          return json_encode($total_cred-$paysolde);
 
       }
 
