@@ -28,7 +28,7 @@ class SaleController extends Controller
     }
 
     public function credits(){
-      $credits=Sale::where("paymethod","Crédit")->get();
+      $credits=Sale::where("paymethod","Crédit")->limit(15)->get();
 
       return json_encode($credits);
     }
@@ -139,10 +139,15 @@ class SaleController extends Controller
       }
 
     }
+    
 
 
     public function  getAllSales(){
-      return json_encode(Sale::all());
+      $sales=Sale::limit(10)->get();
+      $count=$sales->sum('totalpay');
+
+      return json_encode(['sales'=>$sales,'count_sales'=>$count]);
     }
+
 
 }

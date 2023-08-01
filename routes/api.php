@@ -10,16 +10,19 @@ use App\Http\Controllers\API\SettingsController;
 /*
 |--------------------------------------------------------------------------
 | API Routes
-|--------------------------------------------------------------------------
-
+|------------------------------------------
 | Here is where you can register API routes for your application. These
 | routes are loaded by the RouteServiceProvider within a group which
 | is assigned the "api" middleware group. Enjoy building your API!
+|
 */
+
+
 
 Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
+
 
 /*Login utilisé pour le Client Simple*/
 Route::post('login', [UserController::class, 'login']);
@@ -35,3 +38,4 @@ Route::get('credits', [SaleController::class, 'credits']);
 Route::get('all_product', [ProductController::class, 'getAllProduct']);
 Route::get('all_sales', [SaleController::class, 'getAllSales']);
 Route::get('detail_product/{id}', [ProductController::class, 'detailProduct']);
+

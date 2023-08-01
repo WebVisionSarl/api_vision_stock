@@ -14,7 +14,6 @@ class ProductController extends Controller
 {
     //
 
-
     //Retourne l'ensemble  des produits de  la boutique
 
     public function getAllProduct(){
@@ -30,7 +29,6 @@ class ProductController extends Controller
         $new_price=$request->input("new_price");
         $new_qte=$request->input("new_qte");
         $img_prod=$request->input("img_prod");
-
 
         Product::whereId($product_id)->update([
             'product_qte'=>$new_qte,
