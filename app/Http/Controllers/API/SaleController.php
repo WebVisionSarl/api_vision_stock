@@ -10,6 +10,7 @@ use App\Models\User;
 use App\Models\Role;
 use App\Models\Product;
 use App\Models\Sale;
+use App\Models\Expense;
 use App\Models\Credit;
 use App\Models\ProductSale;
 use Illuminate\Support\Facades\Log;
@@ -101,6 +102,13 @@ class SaleController extends Controller
 
     }
 
+    public function saveExpense(Request $request){
+      $expense=new Expense();
+      $expense->motif=$request->input("motif");
+      $expense->price=$request->input("price");
+      $expense->save();
+    }
+
     public function saveSale(Request $request){
       $user=$request->input("user");
       $clientname=$request->input("clientname");
@@ -147,6 +155,15 @@ class SaleController extends Controller
       $count=$sales->sum('totalpay');
 
       return json_encode(['sales'=>$sales,'count_sales'=>$count]);
+    }
+    
+
+
+    public function  getAllExpenses(Request $request){
+      $expenses=Expense::limit(10)->orderBy('id','DESC')->get();
+      $count=$expenses->sum('price');
+
+      return json_encode(['expenses'=>$expenses,'count_expenses'=>$count]);
     }
 
 

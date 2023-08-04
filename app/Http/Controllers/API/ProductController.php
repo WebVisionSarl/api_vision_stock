@@ -17,7 +17,7 @@ class ProductController extends Controller
     //Retourne l'ensemble  des produits de  la boutique
 
     public function getAllProduct(){
-      $products=Product::all();
+      $products=Product::orderBy("id","DESC")->get();
       return json_encode($products);
     }
 

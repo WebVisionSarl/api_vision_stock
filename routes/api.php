@@ -34,8 +34,10 @@ Route::post('update_product', [ProductController::class, 'update_product']);
 Route::post('delete_product', [ProductController::class, 'delete_product']);
 Route::post('save_sales', [SaleController::class, 'saveSale']);
 Route::post('soldecredit', [SaleController::class, 'soldecredit']);
+Route::post('saveExpense', [SaleController::class, 'saveExpense']);
 Route::get('credits', [SaleController::class, 'credits']);
 Route::get('all_product', [ProductController::class, 'getAllProduct']);
 Route::get('all_sales', [SaleController::class, 'getAllSales']);
+Route::get('all_expenses', [SaleController::class, 'getAllExpenses']);
 Route::get('detail_product/{id}', [ProductController::class, 'detailProduct']);
 
