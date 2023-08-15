@@ -38,4 +38,13 @@ class SettingsController extends Controller
     return json_encode(Setting::first());
   }
 
+
+  public function setStructure(Request $request){
+
+    $setting=Setting::first();
+    Setting::whereId($setting->id)->update([
+      "structure"=>$request->input("structure")
+    ]);
+  }
+
 }

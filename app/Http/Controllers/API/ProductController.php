@@ -67,5 +67,12 @@ class ProductController extends Controller
     }
 
 
+    public function delete_product($id){
+
+      
+
+    }
+
+
 
 }

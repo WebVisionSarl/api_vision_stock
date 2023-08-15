@@ -9,6 +9,7 @@ class Setting extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'structure',
         'theme',
         'active',
         'hour_synch',

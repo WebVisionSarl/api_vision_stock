@@ -8,13 +8,15 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Role;
+use App\Models\Setting;
 use App\Models\Product;
 use App\Models\Sale;
 use App\Models\Expense;
 use App\Models\Credit;
 use App\Models\ProductSale;
 use Illuminate\Support\Facades\Log;
-
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class SaleController extends Controller
 {
@@ -25,6 +27,15 @@ class SaleController extends Controller
       // $today=;
       // $rapp=Sale::where('created_at',$today);
 
+
+    }
+
+    public function paginateSales($limit){
+
+      
+      $data = Sale::orderBy('id','DESC')->simplePaginate($limit);
+
+      return json_encode($data);
 
     }
 
@@ -147,14 +158,118 @@ class SaleController extends Controller
       }
 
     }
+
+
+    // Stat five month past
+
+    public function statfive(){
+
+      $startDate = Carbon::now()->subMonths(4)->startOfMonth(); // Date de début pour les 5 derniers mois
+      $endDate = Carbon::now()->endOfMonth(); // Date de fin pour les 5 derniers mois
+
+      $stat=[];
+
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(4)->startOfMonth(), Carbon::now()->subMonths(4)->endOfMonth()])->get()->sum("totalpay");
+      
+      array_push($stat,$sale);
+    
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(3)->startOfMonth(), Carbon::now()->subMonths(3)->endOfMonth()])->get()->sum("totalpay");
+      
+      array_push($stat,$sale);
+    
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(2)->startOfMonth(), Carbon::now()->subMonths(2)->endOfMonth()])->get()->sum("totalpay");
+      
+      array_push($stat,$sale);
+    
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(1)->startOfMonth(), Carbon::now()->subMonths(1)->endOfMonth()])->get()->sum("totalpay");
+      
+      array_push($stat,$sale);
+    
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->get()->sum("totalpay");
+      
+      array_push($stat,$sale);
+    
+      
+
+      return json_encode($stat);
+
+    }
     
 
 
-    public function  getAllSales(){
-      $sales=Sale::limit(10)->get();
-      $count=$sales->sum('totalpay');
+    public function  resumeToday(){
 
-      return json_encode(['sales'=>$sales,'count_sales'=>$count]);
+      $mostOrderedProducts = DB::table('product_sales')->whereDate('created_at',Carbon::today())
+    ->select('product_name', DB::raw('SUM(product_qte) as total_quantity'))
+    ->groupBy('product_name')
+    ->orderByDesc('total_quantity')
+    ->take(5)
+    ->get();
+
+      $sales=Sale::whereDate('created_at',Carbon::today())->get();
+      $creances=Credit::whereDate('created_at',Carbon::today())->get();
+      $count_expenses=Expense::whereDate('created_at',Carbon::today())->get()->sum("price");
+      $count_sales=$sales->sum('totalpay');
+      $count_creances=$creances->sum('total_credit');
+
+      $structure=Setting::first()->structure;
+
+
+      $statSales=[];
+      $statCredit=[];
+      $statExpenses=[];
+
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(4)->startOfMonth(), Carbon::now()->subMonths(4)->endOfMonth()])->get()->sum("totalpay");
+      $credit=Credit::whereBetween('created_at',[Carbon::now()->subMonths(4)->startOfMonth(), Carbon::now()->subMonths(4)->endOfMonth()])->get()->sum("total_credit");
+      $expenses=Expense::whereBetween('created_at',[Carbon::now()->subMonths(4)->startOfMonth(), Carbon::now()->subMonths(4)->endOfMonth()])->get()->sum("price");
+      
+      array_push($statSales,$sale);
+      array_push($statCredit,$credit);
+      array_push($statExpenses,$expenses);
+    
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(3)->startOfMonth(), Carbon::now()->subMonths(3)->endOfMonth()])->get()->sum("totalpay");
+      $credit=Credit::whereBetween('created_at',[Carbon::now()->subMonths(3)->startOfMonth(), Carbon::now()->subMonths(3)->endOfMonth()])->get()->sum("total_credit");
+      $expenses=Expense::whereBetween('created_at',[Carbon::now()->subMonths(3)->startOfMonth(), Carbon::now()->subMonths(3)->endOfMonth()])->get()->sum("price");
+      
+      array_push($statSales,$sale);
+      array_push($statCredit,$credit);
+      array_push($statExpenses,$expenses);
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(2)->startOfMonth(), Carbon::now()->subMonths(2)->endOfMonth()])->get()->sum("totalpay");
+      $credit=Credit::whereBetween('created_at',[Carbon::now()->subMonths(2)->startOfMonth(), Carbon::now()->subMonths(2)->endOfMonth()])->get()->sum("total_credit");
+      $expenses=Expense::whereBetween('created_at',[Carbon::now()->subMonths(2)->startOfMonth(), Carbon::now()->subMonths(2)->endOfMonth()])->get()->sum("totalpay");
+      
+      array_push($statSales,$sale);
+      array_push($statCredit,$credit);
+      array_push($statExpenses,$expenses);
+
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->subMonths(1)->startOfMonth(), Carbon::now()->subMonths(1)->endOfMonth()])->get()->sum("totalpay");
+      $credit=Credit::whereBetween('created_at',[Carbon::now()->subMonths(1)->startOfMonth(), Carbon::now()->subMonths(1)->endOfMonth()])->get()->sum("total_credit");
+      $expenses=Expense::whereBetween('created_at',[Carbon::now()->subMonths(1)->startOfMonth(), Carbon::now()->subMonths(1)->endOfMonth()])->get()->sum("price");
+      
+      array_push($statSales,$sale);
+      array_push($statCredit,$credit);
+      array_push($statExpenses,$expenses);
+    
+      $sale=Sale::whereBetween('created_at',[Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->get()->sum("totalpay");
+      $credit=Credit::whereBetween('created_at',[Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->get()->sum("total_credit");
+      $expenses=Expense::whereBetween('created_at',[Carbon::now()->startOfMonth(), Carbon::now()->endOfMonth()])->get()->sum("price");
+      
+      $statMonth=[];
+      array_push($statSales,$sale);
+      array_push($statCredit,$credit);
+      array_push($statExpenses,$expenses);
+      array_push($statMonth,$sale,$credit,$expenses);
+
+
+      return json_encode(['sales'=>$sales,'count_sales'=>$count_sales,'count_creances'=>$count_creances,'count_expenses'=>$count_expenses,'most_order'=>$mostOrderedProducts,'structure'=>$structure,'stat_sales'=>$statSales,'stat_cred'=>$statCredit,'stat_exp'=>$statExpenses,'thismonth'=>$statMonth]);
     }
     
 
